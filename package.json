@@ -1,0 +1,38 @@
+{
+  "name": "naviboard",
+  "version": "2.0.0",
+  "description": "A javascript library for handling navigation on web application, feature phone and KAIOS applications.",
+  "main": "src/index.js",
+  "scripts": {
+    "commit":"git-cz",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amanboss9/naviboard.git"
+  },
+  "keywords": [
+    "KaiOS",
+    "featurePhone",
+    "keyboard",
+    "navigation",
+    "focusHandling"
+  ],
+  "author": "Aman Sharma <amansharma.iitbhu@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/amanboss9/naviboard/issues"
+  },
+  "homepage": "https://github.com/amanboss9/naviboard#readme",
+  "devDependencies": {
+    "commitizen": "2.10.1"
+  },
+  "dependencies": {
+    "cz-conventional-changelog": "2.1.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  }
+}
