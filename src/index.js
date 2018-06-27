@@ -1,3 +1,3 @@
-var naviBoard = require('../lib/naviboard');
+import naviBoard from '../lib/naviboard';
 
 module.exports = naviBoard;

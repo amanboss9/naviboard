@@ -1,6 +1,9 @@
 # naviboard JS
 
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) 
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[ ![NPM Version](http://img.shields.io/npm/v/naviboard.svg?style=flat) ](https://www.npmjs.com/package/naviboard)
+[ ![Downloads This Week](http://img.shields.io/npm/dm/naviboard.svg?style=flat) ](https://www.npmjs.com/package/naviboard)
+[ ![License](http://img.shields.io/npm/l/naviboard.svg?style=flat) ](https://www.npmjs.com/package/naviboard)
 
 
 Naviboard is a library for navigation with the help of keyboard/keypad in the feature phone web applications(e.g kaiOS applications). This library helps developer to think about logic rather than thinking about handling navigation in their web page by simple API's. Developers working on feature phones in new generation which need navigation support from keypad to browse in their native application will surely be benefited with this small javascipt library.It auto generates a schema based on desired navigation according to design.
