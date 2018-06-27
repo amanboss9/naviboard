@@ -1,6 +1,6 @@
 {
   "name": "naviboard",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A javascript library for handling navigation on web application, feature phone and KAIOS applications.",
   "main": "src/index.js",
   "scripts": {
