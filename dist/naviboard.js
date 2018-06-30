@@ -116,6 +116,8 @@ module.exports = _naviboard2.default;
 "use strict";
 
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 var masterElement = window;
 
 function naviboard() {
@@ -138,7 +140,7 @@ naviboard.prototype._getLocationOfActiveElement = function (elem) {
         for (var i = 0; i < this.matrixForNavigation.length; i++) {
             for (var j = 0; j < this.matrixForNavigation[0].length; j++) {
                 if (this.matrixForNavigation[i][j] == elem) {
-                    console.log("getLocation" + i + ' ' + j);
+                    // console.log("getLocation" + i + ' ' + j);
                     return [i, j];
                     break;
                 }
@@ -172,10 +174,10 @@ function createArray(length) {
 }
 
 function fillNavigationArray(temp1, temp2) {
-    console.log(temp2);
+    // console.log(temp2);
     var arrToFill = Array.from(Object.create(temp2));
     var obj = temp1;
-    console.log(obj);
+    // console.log(obj);
     if (obj != undefined && obj != []) {
         for (var i = 0; i < obj.length; i++) {
             for (var j = 0; j < obj[i].length; j++) {
@@ -188,10 +190,12 @@ function fillNavigationArray(temp1, temp2) {
 
 naviboard.prototype.makeNavigationRulesForComponent = function (obj, row, column) {
     var self = this;
+    // console.log(row, column);
     var navArray = JSON.parse(JSON.stringify(createArray(row, column)));
-    console.log(row, column);
 
     var _getMatrixForNavigation = new Promise(function (resolve, reject) {
+        // console.log(obj);
+
         var sortByXYcoordinate = function sortByXYcoordinate(list) {
 
             for (var i = 0; i < list.length; i++) {
@@ -231,6 +235,9 @@ naviboard.prototype.makeNavigationRulesForComponent = function (obj, row, column
                     }
                 }
             }
+            if (arr_to_push.length > 0 && sorted_by_x.length == 0) {
+                sorted_by_x.push(arr_to_push);
+            }
 
             for (var j = 0; j < sorted_by_x.length; j++) {
                 sorted_by_x[j].sort(function (a, b) {
@@ -247,7 +254,6 @@ naviboard.prototype.makeNavigationRulesForComponent = function (obj, row, column
 
     _getMatrixForNavigation.then(function (matrix) {
         self.matrixForNavigation = matrix;
-
         if (self.matrixForNavigation.length != 0 && self.matrixForNavigation != undefined) {
             if (self.prevComponentRendered.length >= 2 && self.prevActiveElement.length >= 2) {
                 if (self.prevComponentRendered[self.prevComponentRendered.length - 2] == self.nextComponentRendered && self.prevComponentRendered[self.prevComponentRendered.length - 2] != null && self.nextComponentRendered != null) {
@@ -287,11 +293,13 @@ naviboard.prototype.destroyCurrentNavigationView = function (id, status) {
             if (this.prevComponentRendered.length >= 5) {
                 this.prevComponentRendered = this.prevComponentRendered.slice(Math.max(this.prevComponentRendered.length - 5, 2));
             }
-            this.prevActiveElement.push(_getLocationOfactiveElement(this.activeElement));
+            this.prevActiveElement.push(this._getLocationOfActiveElement(this.activeElement));
             if (this.prevActiveElement.length >= 5) {
                 this.prevActiveElement = this.prevActiveElement.slice(Math.max(this.prevActiveElement.length - 5, 2));
             }
             this.arrayOfCoordinates = [];
+            xFilled = [];
+            yFilled = [];
             this.initialOffsetX = 0;
             this.initialOffsetY = 0;
             this.matrixForNavigation = null;
@@ -303,6 +311,8 @@ naviboard.prototype.destroyCurrentNavigationView = function (id, status) {
             prevTime = newTime;
             return true;
         } else {
+            xFilled = [];
+            yFilled = [];
             this.arrayOfCoordinates = [];
             this.initialOffsetX = 0;
             this.initialOffsetY = 0;
@@ -319,7 +329,7 @@ naviboard.prototype.destroyCurrentNavigationView = function (id, status) {
 var xFilled = [];
 var yFilled = [];
 naviboard.prototype.increaseRowCountIfRequired = function (offset, rowcount) {
-    if (offset.y > this.initialOffsetY && offset.y > Math.max.apply(Math, yFilled)) {
+    if (offset.y > this.initialOffsetY && offset.y > Math.max.apply(Math, _toConsumableArray(yFilled))) {
         this.initialOffsetY = offset.y;
         yFilled.push(offset.y);
         return rowcount + 1;
@@ -332,7 +342,7 @@ naviboard.prototype.increaseRowCountIfRequired = function (offset, rowcount) {
     }
 };
 naviboard.prototype.increaseColumnCountIfRequired = function (offset, columnCount) {
-    if (offset.x > this.initialOffsetX && offset.x > Math.max.apply(Math, xFilled)) {
+    if (offset.x > this.initialOffsetX && offset.x > Math.max.apply(Math, _toConsumableArray(xFilled))) {
         this.initialOffsetX = offset.x;
         xFilled.push(offset.x);
         return columnCount + 1;
@@ -388,8 +398,12 @@ naviBoard.getCurrentActiveElement = function () {
 };
 
 naviBoard.setCurrentViewDOMNavigation = function (id) {
-    this.nextComponentRendered = id;
-    this.handleView(id);
+    if (this.matrixForNavigation === null) {
+        this.nextComponentRendered = id;
+        this.handleView(id);
+    } else {
+        // console.log("Destroy the previous navigation first!");
+    }
 };
 
 naviBoard.destroyCurrentViewDOMNavigation = function (id) {
@@ -403,7 +417,7 @@ naviBoard.getCurrentEvent = function (event) {
 naviBoard.refreshViewForNavigation = function (id, status) {
     if (status == "refresh") {
         this.prevComponentRendered.push(this.componentRendered);
-        this.prevActiveElement.push(getLocationOfActiveElem(activeElement));
+        this.prevActiveElement.push(this._getLocationOfActiveElement(activeElement));
         var refreshstatus = this.destroyCurrentNavigationView(id, "destroy");
         if (refreshstatus) {
             this.handleView(id);
@@ -417,147 +431,151 @@ naviBoard.refreshViewForNavigation = function (id, status) {
     }
 };
 
+naviBoard.getCurrentComponentRendered = function () {
+    return this.componentRendered;
+};
+
 var handleKeyDown = function (event) {
+    if (this.matrixForNavigation !== null) {
+        var maxHeight = this.matrixForNavigation.length;
+        var maxWidth = this.matrixForNavigation[0].length;
 
-    var maxHeight = this.matrixForNavigation.length;
-    var maxWidth = this.matrixForNavigation[0].length;
-
-    var check_the_left = function () {
-        var _column = arguments[1];
-        while (_column >= 0) {
-            if (this.matrixForNavigation[arguments[0]][_column] !== undefined && this.matrixForNavigation[arguments[0]][_column] !== null) {
-                this.activeElement.blur();
-                this.currentX = arguments[0];
-                this.currentY = _column;
-                this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
-                this.activeElement.focus();
-                return true;
-            }
-            _column--;
-        }
-        return false;
-    }.bind(this);
-
-    var check_the_right = function () {
-        var _column = arguments[1];
-        while (_column < maxWidth) {
-            if (this.matrixForNavigation[arguments[0]][_column] !== undefined && this.matrixForNavigation[arguments[0]][_column] !== null) {
-                this.activeElement.blur();
-                this.currentX = arguments[0];
-                this.currentY = _column;
-                this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
-                this.activeElement.focus();
-                return true;
-            }
-            _column++;
-        }
-        return false;
-    }.bind(this);
-
-    var check_the_top = function () {
-        var _row = arguments[0];
-        while (_row >= 0) {
-            if (this.matrixForNavigation[_row][arguments[1]] !== undefined && this.matrixForNavigation[_row][arguments[1]] !== null) {
-                this.activeElement.blur();
-                this.currentY = arguments[1];
-                this.currentX = _row;
-                this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
-                this.activeElement.focus();
-                return true;
-            }
-            _row--;
-        }
-        return false;
-    }.bind(this);
-
-    var check_the_bottom = function () {
-        var _row = arguments[0];
-        while (_row < maxHeight) {
-            if (this.matrixForNavigation[_row][arguments[1]] !== undefined && this.matrixForNavigation[_row][arguments[1]] !== null) {
-                this.activeElement.blur();
-                this.currentY = arguments[1];
-                this.currentX = _row;
-                this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
-                this.activeElement.focus();
-                return true;
-            }
-            _row++;
-        }
-        return false;
-    }.bind(this);
-
-    if (this.matrixForNavigation != null && this.matrixForNavigation.length != 0) {
-        this.currentEvent = event;
-        if (event.keyCode == 40) {
-            //Navigating down in vertical direction
-            if (this.currentX + 1 >= maxHeight) {//"Nothing is DOWN!"
-
-            } else if (this.matrixForNavigation[this.currentX + 1][this.currentY] != undefined) {
-                this.activeElement.blur();
-                this.currentX = this.currentX + 1;
-                this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
-                this.activeElement.focus();
-            } else if (this.matrixForNavigation[this.currentX + 1][this.currentY] !== undefined && this.matrixForNavigation[this.currentX + 1][this.currentY] === null) {
-                if (this.currentY > 0) {
-                    var check = check_the_left(this.currentX + 1, this.currentY);
-                    if (check == false) {
-                        check_the_right(this.currentX + 1, this.currentY);
-                    }
+        var check_the_left = function () {
+            var _column = arguments[1];
+            while (_column >= 0) {
+                if (this.matrixForNavigation[arguments[0]][_column] !== undefined && this.matrixForNavigation[arguments[0]][_column] !== null) {
+                    this.activeElement.blur();
+                    this.currentX = arguments[0];
+                    this.currentY = _column;
+                    this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
+                    this.activeElement.focus();
+                    return true;
                 }
-            } else {}
-        } else if (event.keyCode == 38) {
-            if (this.currentX - 1 < 0) {//"Nothing is UP !!"
+                _column--;
+            }
+            return false;
+        }.bind(this);
 
-            } else if (this.matrixForNavigation[this.currentX - 1][this.currentY] != undefined) {
-                this.activeElement.blur();
-                this.currentX = this.currentX - 1;
-                this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
-                this.activeElement.focus();
-            } else if (this.matrixForNavigation[this.currentX - 1][this.currentY] !== undefined && this.matrixForNavigation[this.currentX - 1][this.currentY] === null) {
-                if (this.currentY > 0) {
-                    var check = check_the_left(this.currentX - 1, this.currentY);
-                    if (check == false) {
-                        check_the_right(this.currentX - 1, this.currentY);
-                    }
+        var check_the_right = function () {
+            var _column = arguments[1];
+            while (_column < maxWidth) {
+                if (this.matrixForNavigation[arguments[0]][_column] !== undefined && this.matrixForNavigation[arguments[0]][_column] !== null) {
+                    this.activeElement.blur();
+                    this.currentX = arguments[0];
+                    this.currentY = _column;
+                    this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
+                    this.activeElement.focus();
+                    return true;
                 }
-            } else {}
-        } else if (event.keyCode == 39) {
-            if (this.currentY + 1 >= maxWidth) {//"Nothing is RIGHT !"
+                _column++;
+            }
+            return false;
+        }.bind(this);
 
-            } else if (this.matrixForNavigation[this.currentX][this.currentY + 1] != undefined) {
-                this.activeElement.blur();
-                this.currentY = this.currentY + 1;
-                this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
-                this.activeElement.focus();
-            } else if (this.matrixForNavigation[this.currentX][this.currentY + 1] !== undefined && this.matrixForNavigation[this.currentX][this.currentY + 1] === null) {
-                if (this.currentY > 0) {
-                    var check = check_the_top(this.currentX, this.currentY + 1);
-                    if (check == false) {
-                        check_the_bottom(this.currentX, this.currentY + 1);
-                    }
+        var check_the_top = function () {
+            var _row = arguments[0];
+            while (_row >= 0) {
+                if (this.matrixForNavigation[_row][arguments[1]] !== undefined && this.matrixForNavigation[_row][arguments[1]] !== null) {
+                    this.activeElement.blur();
+                    this.currentY = arguments[1];
+                    this.currentX = _row;
+                    this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
+                    this.activeElement.focus();
+                    return true;
                 }
-            } else {}
-        } else if (event.keyCode == 37) {
-            if (this.currentY - 1 < 0) {//"Nothing is LEFT !!"
+                _row--;
+            }
+            return false;
+        }.bind(this);
 
-            } else if (this.matrixForNavigation[this.currentX][this.currentY - 1] != undefined) {
-                this.activeElement.blur();
-                this.currentY = this.currentY - 1;
-                this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
-                this.activeElement.focus();
-            } else if (this.matrixForNavigation[this.currentX][this.currentY - 1] !== undefined && this.matrixForNavigation[this.currentX][this.currentY - 1] === null) {
-                if (this.currentX > 0) {
-                    var check = check_the_top(this.currentX, this.currentY - 1);
-                    if (check == false) {
-                        check_the_bottom(this.currentX, this.currentY - 1);
-                    }
+        var check_the_bottom = function () {
+            var _row = arguments[0];
+            while (_row < maxHeight) {
+                if (this.matrixForNavigation[_row][arguments[1]] !== undefined && this.matrixForNavigation[_row][arguments[1]] !== null) {
+                    this.activeElement.blur();
+                    this.currentY = arguments[1];
+                    this.currentX = _row;
+                    this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
+                    this.activeElement.focus();
+                    return true;
                 }
-            } else {}
-        } else {
-            // $rootScope.$emit('handleEvent', [event, this.activeElement]);
+                _row++;
+            }
+            return false;
+        }.bind(this);
 
-        }
-    } else {}
+        if (this.matrixForNavigation != null && this.matrixForNavigation.length != 0) {
+            this.currentEvent = event;
+            if (event.keyCode == 40) {
+                //Navigating down in vertical direction
+                if (this.currentX + 1 >= maxHeight) {//"Nothing is DOWN!"
+
+                } else if (this.matrixForNavigation[this.currentX + 1][this.currentY] != undefined) {
+                    this.activeElement.blur();
+                    this.currentX = this.currentX + 1;
+                    this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
+                    this.activeElement.focus();
+                } else if (this.matrixForNavigation[this.currentX + 1][this.currentY] !== undefined && this.matrixForNavigation[this.currentX + 1][this.currentY] === null) {
+                    if (this.currentY > 0) {
+                        var check = check_the_left(this.currentX + 1, this.currentY);
+                        if (check == false) {
+                            check_the_right(this.currentX + 1, this.currentY);
+                        }
+                    }
+                } else {}
+            } else if (event.keyCode == 38) {
+                if (this.currentX - 1 < 0) {//"Nothing is UP !!"
+
+                } else if (this.matrixForNavigation[this.currentX - 1][this.currentY] != undefined) {
+                    this.activeElement.blur();
+                    this.currentX = this.currentX - 1;
+                    this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
+                    this.activeElement.focus();
+                } else if (this.matrixForNavigation[this.currentX - 1][this.currentY] !== undefined && this.matrixForNavigation[this.currentX - 1][this.currentY] === null) {
+                    if (this.currentY > 0) {
+                        var check = check_the_left(this.currentX - 1, this.currentY);
+                        if (check == false) {
+                            check_the_right(this.currentX - 1, this.currentY);
+                        }
+                    }
+                } else {}
+            } else if (event.keyCode == 39) {
+                if (this.currentY + 1 >= maxWidth) {//"Nothing is RIGHT !"
+
+                } else if (this.matrixForNavigation[this.currentX][this.currentY + 1] != undefined) {
+                    this.activeElement.blur();
+                    this.currentY = this.currentY + 1;
+                    this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
+                    this.activeElement.focus();
+                } else if (this.matrixForNavigation[this.currentX][this.currentY + 1] !== undefined && this.matrixForNavigation[this.currentX][this.currentY + 1] === null) {
+                    if (this.currentY > 0) {
+                        var check = check_the_top(this.currentX, this.currentY + 1);
+                        if (check == false) {
+                            check_the_bottom(this.currentX, this.currentY + 1);
+                        }
+                    }
+                } else {}
+            } else if (event.keyCode == 37) {
+                if (this.currentY - 1 < 0) {//"Nothing is LEFT !!"
+
+                } else if (this.matrixForNavigation[this.currentX][this.currentY - 1] != undefined) {
+                    this.activeElement.blur();
+                    this.currentY = this.currentY - 1;
+                    this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
+                    this.activeElement.focus();
+                } else if (this.matrixForNavigation[this.currentX][this.currentY - 1] !== undefined && this.matrixForNavigation[this.currentX][this.currentY - 1] === null) {
+                    if (this.currentX > 0) {
+                        var check = check_the_top(this.currentX, this.currentY - 1);
+                        if (check == false) {
+                            check_the_bottom(this.currentX, this.currentY - 1);
+                        }
+                    }
+                } else {}
+            } else {}
+        } else {}
+    } else {
+        // console.log("Can't navigate i.e matrix is empty!");
+    }
 }.bind(naviBoard);
 
 masterElement.addEventListener("keydown", handleKeyDown, true);
