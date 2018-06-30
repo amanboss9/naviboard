@@ -54,13 +54,20 @@ e.g if a new component has been added in run time we need to update our library 
 
 status could be update ,destroy and refresh depending upon the change in navigation required in application.
 
--There is one more API for getting the current focused element by navigation. "By navigation" explicitly means that if focus is been hindered by other thing we might lose track of the desired navigation.
+- There is one more API for getting the current focused element by navigation. "By navigation" explicitly means that if focus is been hindered by other thing we might lose track of the desired navigation.
 
 Current active element can be used to attach events. Like one can attach `click` event on element and can use `ng-click` on top of that.
 
 ```javascript
  naviBoard.getCurrentActiveElement()
 ```
+
+- You can attach event according to component currently having the access for navigation by getting the current rendered component and can map it to different event.
+
+
+```javascript
+ naviBoard.getCurrentComponentRendered()
+``` 
 
 Happy Coding!!!
 
