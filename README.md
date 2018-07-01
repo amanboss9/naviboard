@@ -1,9 +1,11 @@
 # naviboard JS
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![Travis](https://img.shields.io/travis/amanboss9/naviboard.svg)](https://travis-ci.org/amanboss9/naviboard.svg?branch=master)
 [ ![NPM Version](http://img.shields.io/npm/v/naviboard.svg?style=flat) ](https://www.npmjs.com/package/naviboard)
 [ ![Downloads This Week](http://img.shields.io/npm/dm/naviboard.svg?style=flat) ](https://www.npmjs.com/package/naviboard)
 [ ![License](http://img.shields.io/npm/l/naviboard.svg?style=flat) ](https://www.npmjs.com/package/naviboard)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 
 Naviboard is a library for navigation with the help of keyboard/keypad in the feature phone web applications(e.g kaiOS applications). This library helps developer to think about logic rather than thinking about handling navigation in their web page by simple API's. Developers working on feature phones in new generation which need navigation support from keypad to browse in their native application will surely be benefited with this small javascipt library.It auto generates a schema based on desired navigation according to design.
@@ -71,4 +73,4 @@ Current active element can be used to attach events. Like one can attach `click`
 
 Happy Coding!!!
 
-> Use **naviboard** and suggest changes or modification required as its a small step for *developers* to save their time in order to navigate in feature phone applications instead writing lot of extra lines.
+> Use **naviboard** and suggest changes or modifications required as its a small step for *developers* to save their time in order to navigate in feature phone applications instead writing lot of extra lines.

@@ -1,6 +1,6 @@
 {
   "name": "naviboard",
-  "version": "0.0.0-semantic-release",
+  "version": "0.0.0-semantically-released",
   "description": "A javascript library for handling navigation on web application, feature phone and KAIOS applications.",
   "main": "dist/index.js",
   "scripts": {
@@ -13,7 +13,7 @@
     "test": "mocha -r jsdom-global/register test/naviboard.test.js -w",
     "test:single":"mocha -r jsdom-global/register test/naviboard.test.js",
     "travis-deploy-once": "travis-deploy-once",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
     "type": "git",
