@@ -101,13 +101,9 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var _naviboard = __webpack_require__(1);
-
-var _naviboard2 = _interopRequireDefault(_naviboard);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = _naviboard2.default;
+// import naviBoard from '../lib/naviboard';
+var naviBoard = __webpack_require__(1);
+module.exports = naviBoard;
 
 /***/ }),
 /* 1 */
