@@ -5,6 +5,7 @@
 [ ![NPM Version](http://img.shields.io/npm/v/naviboard.svg?style=flat) ](https://www.npmjs.com/package/naviboard)
 [ ![Downloads This Week](http://img.shields.io/npm/dm/naviboard.svg?style=flat) ](https://www.npmjs.com/package/naviboard)
 [ ![License](http://img.shields.io/npm/l/naviboard.svg?style=flat) ](https://www.npmjs.com/package/naviboard)
+[![](https://data.jsdelivr.com/v1/package/npm/naviboard/badge)](https://www.jsdelivr.com/package/npm/naviboard)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 
@@ -17,6 +18,11 @@ Naviboard is available as a NPM module for use with node.js. If you don't use no
 ```
 
 ### Steps to setup: 
+- Developer can include it directly or by CDN link in `index.html` like below:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/naviboard@2.0.0/dist/naviboard.min.js"></script>
+```
 - After installing/including in `index.html` naviBoard will be available globally.Its ready to use like below:
 
 Whenever the component(Angular, react etc) or the web page is initiating the loading, considering below as the first step:
@@ -36,6 +42,8 @@ Now give id as arguement to the API `setCurrentViewDOMNavigation` eg. ParentElem
 ```javascript
  naviBoard.setCurrentViewDOMNavigation('ParentElementID')
 ```
+- <p data-height="265" data-theme-id="light" data-slug-hash="ZRdZxQ" data-default-tab="html,result" data-user="amanboss9" data-embed-version="2" data-pen-title="exampleNavigation" class="codepen">See the Pen <a href="https://codepen.io/amanboss9/pen/ZRdZxQ/">exampleNavigation</a> by Aman Sharma (<a href="https://codepen.io/amanboss9">@amanboss9</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+
 Yippie!!
 All set to navigate through the elements.But we are ignoring an important parameter to consider while doing this i.e `tabindex` . Don't forget to include this other wise you wont be able to navigate to the desired elements.
 
