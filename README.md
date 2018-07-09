@@ -37,10 +37,10 @@ Give class `navigable` to the elements which require navigation under a parent c
     <div class="box e navigable" tabindex="0">E</div>
 </div>
 ```
-Now give id as arguement to the API `setCurrentViewDOMNavigation` eg. ParentElementID in above case.
+Now give id as arguement to the API `setNavigation` eg. ParentElementID in above case.
 
 ```javascript
- naviBoard.setCurrentViewDOMNavigation('ParentElementID')
+ naviBoard.setNavigation('ParentElementID')
 ```
 - <p data-height="265" data-theme-id="light" data-slug-hash="ZRdZxQ" data-default-tab="html,result" data-user="amanboss9" data-embed-version="2" data-pen-title="exampleNavigation" class="codepen">See the Pen <a href="https://codepen.io/amanboss9/pen/ZRdZxQ/">exampleNavigation</a> by Aman Sharma (<a href="https://codepen.io/amanboss9">@amanboss9</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 
@@ -50,16 +50,16 @@ All set to navigate through the elements.But we are ignoring an important parame
 Now when we want to navigate other page or component, we need to destroy the previous component and set the new one for navigation. Its advisable to use destroy method associated with the component like `componentWillUnmount()` in react or `this.$onDestroy` in angular v1.6.
 
 ```javascript
- naviBoard.destroyCurrentViewDOMNavigation('ParentElementID')
+ naviBoard.destroyNavigation('ParentElementID')
 ```
 ### Other API's: 
 
-When the client is getting refreshed we need to handle it by giving certain input to sustain our navigable items we use `refreshViewForNavigation` API.
+When the client is getting refreshed we need to handle it by giving certain input to sustain our navigable items we use `refreshNavigation` API.
 
 e.g if a new component has been added in run time we need to update our library for taking care of the newly added element or removed element.
 
 ```javascript
- naviBoard.refreshViewForNavigation('ParentElementID',status)
+ naviBoard.refreshNavigation('ParentElementID',status)
 ```
 
 status could be update ,destroy and refresh depending upon the change in navigation required in application.
@@ -69,15 +69,29 @@ status could be update ,destroy and refresh depending upon the change in navigat
 Current active element can be used to attach events. Like one can attach `click` event on element and can use `ng-click` on top of that.
 
 ```javascript
- naviBoard.getCurrentActiveElement()
+ naviBoard.getActiveElement()
 ```
 
 - You can attach event according to component currently having the access for navigation by getting the current rendered component and can map it to different event.
 
 
 ```javascript
- naviBoard.getCurrentComponentRendered()
+ naviBoard.getNavigationComponent()
 ``` 
+- User can pause the navigation in between as well. For Ex: If a rest call is happening and before the response if user wants to pause the navigation and after response if user wants to again resume navigation, he can by using the below API's.
+
+
+```javascript
+ naviBoard.pauseNavigation()
+``` 
+
+
+```javascript
+ naviBoard.resumeNavigation()
+``` 
+
+
+
 
 Happy Coding!!!
 
