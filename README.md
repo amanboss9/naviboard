@@ -44,6 +44,10 @@ Now give id as arguement to the API `setNavigation` eg. ParentElementID in above
 ```
 - <p data-height="265" data-theme-id="light" data-slug-hash="ZRdZxQ" data-default-tab="html,result" data-user="amanboss9" data-embed-version="2" data-pen-title="exampleNavigation" class="codepen">See the Pen <a href="https://codepen.io/amanboss9/pen/ZRdZxQ/">exampleNavigation</a> by Aman Sharma (<a href="https://codepen.io/amanboss9">@amanboss9</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 
+Go to the below link for proper understanding of other API's
+
+- https://jsfiddle.net/amanboss9/unf94tjo/3/embedded/result/
+
 Yippie!!
 All set to navigate through the elements.But we are ignoring an important parameter to consider while doing this i.e `tabindex` . Don't forget to include this other wise you wont be able to navigate to the desired elements.
 
