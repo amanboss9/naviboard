@@ -21,7 +21,7 @@ Naviboard is available as a NPM module for use with node.js. If you don't use no
 - Developer can include it directly or by CDN link in `index.html` like below:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/naviboard@2.0.0/dist/naviboard.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/naviboard@3.0.0/dist/naviboard.min.js"></script>
 ```
 - After installing/including in `index.html` naviBoard will be available globally.Its ready to use like below:
 

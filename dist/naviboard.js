@@ -129,6 +129,7 @@ function naviboard() {
     this.arrayOfCoordinates = [];
     this.initialOffsetX = 0;
     this.initialOffsetY = 0;
+    this.resume = true;
 }
 
 naviboard.prototype._getLocationOfActiveElement = function (elem) {
@@ -385,15 +386,11 @@ naviboard.prototype.handleView = function (elementIdOfComponentDOM) {
 
 var naviBoard = new naviboard();
 
-naviBoard.updateFocusInNavigationMatrix = function (element) {
-    this._updateLocationInNavigationMatrix(element);
-};
-
-naviBoard.getCurrentActiveElement = function () {
+naviBoard.getActiveElement = function () {
     return this.activeElement;
 };
 
-naviBoard.setCurrentViewDOMNavigation = function (id) {
+naviBoard.setNavigation = function (id) {
     if (this.matrixForNavigation === null) {
         this.nextComponentRendered = id;
         this.handleView(id);
@@ -402,7 +399,7 @@ naviBoard.setCurrentViewDOMNavigation = function (id) {
     }
 };
 
-naviBoard.destroyCurrentViewDOMNavigation = function (id) {
+naviBoard.destroyNavigation = function (id) {
     this.destroyCurrentNavigationView(id, "destroy");
 };
 
@@ -410,7 +407,7 @@ naviBoard.getCurrentEvent = function (event) {
     return this.currentEvent;
 };
 
-naviBoard.refreshViewForNavigation = function (id, status) {
+naviBoard.refreshNavigation = function (id, status) {
     if (status == "refresh") {
         this.prevComponentRendered.push(this.componentRendered);
         this.prevActiveElement.push(this._getLocationOfActiveElement(activeElement));
@@ -427,12 +424,18 @@ naviBoard.refreshViewForNavigation = function (id, status) {
     }
 };
 
-naviBoard.getCurrentComponentRendered = function () {
+naviBoard.getNavigationComponent = function () {
     return this.componentRendered;
 };
 
+naviBoard.resumeNavigation = function () {
+    this.resume = true;
+};
+naviBoard.pauseNavigation = function () {
+    this.resume = false;
+};
 var handleKeyDown = function (event) {
-    if (this.matrixForNavigation !== null) {
+    if (this.matrixForNavigation !== null && this.resume) {
         var maxHeight = this.matrixForNavigation.length;
         var maxWidth = this.matrixForNavigation[0].length;
 
@@ -570,7 +573,7 @@ var handleKeyDown = function (event) {
             } else {}
         } else {}
     } else {
-        // console.log("Can't navigate i.e matrix is empty!");
+        console.log("Navigation is paused");
     }
 }.bind(naviBoard);
 
