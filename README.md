@@ -21,7 +21,7 @@ Naviboard is available as a NPM module for use with node.js. If you don't use no
 - Developer can include it directly or by CDN link in `index.html` like below:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/naviboard@4.0.0/dist/naviboard.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/naviboard@latest-version/dist/naviboard.min.js"></script>
 ```
 - After installing/including in `index.html` naviBoard will be available globally.Its ready to use like below:
 
@@ -49,7 +49,7 @@ Go to the below link for proper understanding of other API's
 - https://jsfiddle.net/amanboss9/unf94tjo/3/embedded/result/
 
 Yippie!!
-All set to navigate through the elements.But we are ignoring an important parameter to consider while doing this i.e `tabindex` . Don't forget to include this other wise you wont be able to navigate to the desired elements.
+All set to navigate through the elements.
 
 Now when we want to navigate other page or component, we need to destroy the previous component and set the new one for navigation. Its advisable to use destroy method associated with the component like `componentWillUnmount()` in react or `this.$onDestroy` in angular v1.6.
 
