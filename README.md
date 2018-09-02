@@ -99,4 +99,4 @@ Current active element can be used to attach events. Like one can attach `click`
 
 Happy Coding!!!
 
-> Use **naviboard** and suggest changes or modifications required as its a small step for *developers* to save their time in order to navigate in feature phone applications instead writing lot of extra lines.
+> Use **naviboard** and suggest changes or modifications required as its a small step for *developers* to save their time in order to navigate in feature phone/banana phones applications instead writing lot of extra lines.
