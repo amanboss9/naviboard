@@ -30,11 +30,11 @@ Give class `navigable` to the elements which require navigation under a parent c
 
 ```html
 <div class="wrapper" id='ParentElementID'>
-    <div class="box a navigable" tabindex="0">A</div>
-    <div class="box b navigable" tabindex="0">B</div>
-    <div class="box c navigable" tabindex="0">C</div>
-    <div class="box d navigable" tabindex="0">D</div>
-    <div class="box e navigable" tabindex="0">E</div>
+    <div class="box a navigable">A</div>
+    <div class="box b navigable">B</div>
+    <div class="box c navigable">C</div>
+    <div class="box d navigable">D</div>
+    <div class="box e navigable">E</div>
 </div>
 ```
 Now give id as arguement to the API `setNavigation` eg. ParentElementID in above case.
