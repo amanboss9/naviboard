@@ -9,7 +9,7 @@
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 
-Naviboard is a library for navigation with the help of keyboard/keypad in the feature phone web applications(e.g kaiOS applications). This library helps developer to think about logic rather than thinking about handling navigation in their web page by simple API's. Developers working on feature phones in new generation which need navigation support from keypad to browse in their native application will surely be benefited with this small javascipt library.It auto generates a schema based on desired navigation according to design.
+Naviboard is a library for navigation with the help of keyboard/keypad in the feature phone web applications(e.g kaiOS applications). This library helps developer to think about logic rather than thinking about handling navigation in their web page by simple API's. Developers working on feature phones which need navigation support from keypad to browse in their native application will surely be benefited with this small javascipt library.It auto generates a navigation schema based on desired navigation according to design.
 
 Naviboard is available as a NPM module for use with node.js. If you don't use node to install the library then you can simply include naviboard.js or naviboard.min.js from the dist folder in this repo. These files are UMD wrapped so they can be used with or without a module loader such as requireJS.
 
@@ -18,11 +18,13 @@ Naviboard is available as a NPM module for use with node.js. If you don't use no
 ```
 
 ### Steps to setup: 
-- Developer can include it directly or by CDN link in `index.html` like below:
+- Developer can include it directly or by CDN link in `index.html` like below: 
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/naviboard@latest-version/dist/naviboard.min.js"></script>
 ```
+- Please check the latest stable version available in the release list.
+
 - After installing/including in `index.html` naviBoard will be available globally.Its ready to use like below:
 
 Whenever the component(Angular, React etc) or the web page is initiating the loading, considering below as the first step:
@@ -44,9 +46,11 @@ Now give id as arguement to the API `setNavigation` eg. ParentElementID in above
 ```
 - <p data-height="265" data-theme-id="light" data-slug-hash="ZRdZxQ" data-default-tab="html,result" data-user="amanboss9" data-embed-version="2" data-pen-title="exampleNavigation" class="codepen">See the Pen <a href="https://codepen.io/amanboss9/pen/ZRdZxQ/">exampleNavigation</a> by Aman Sharma (<a href="https://codepen.io/amanboss9">@amanboss9</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 
+- <p data-height="277" data-theme-id="0" data-slug-hash="zLYwaZ" data-default-tab="js,result" data-user="amanboss9" data-pen-title="Spatial-Navigation Naviboard" class="codepen">See the Pen <a href="https://codepen.io/amanboss9/pen/zLYwaZ/">Spatial-Navigation Naviboard</a> by Aman Sharma (<a href="https://codepen.io/amanboss9">@amanboss9</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+
 Go to the below link for proper understanding of other API's
 
-- https://jsfiddle.net/amanboss9/unf94tjo/3/embedded/result/
+- https://jsfiddle.net/amanboss9/zv5hocxq/2/embedded/result
 
 Yippie!!
 All set to navigate through the elements.

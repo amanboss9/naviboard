@@ -196,7 +196,7 @@ function fillNavigationArray(temp1, temp2, t_width, t_height) {
         }
 
         if (obj[i][j] !== null && (elemWidth > 1 || elemHeight > 1)) {
-          _expandElement(arrToFill, obj[i][j].elementToFocus, i, j, elemHeight, elemWidth);
+          _expandElement(arrToFill, obj[i][j].elementToFocus, i, j, elemWidth, elemHeight);
         } else if (obj[i][j] !== null) {
           arrToFill[i][j] = obj[i][j].elementToFocus;
         } else {// "Its null and non expanding!!
@@ -298,25 +298,50 @@ naviboard.prototype.makeNavigationRulesForComponent = function (obj, row, column
     self.matrixForNavigation = matrix;
 
     if (self.matrixForNavigation.length != 0 && self.matrixForNavigation != undefined) {
+      var prevcomponent_back = false;
+
       if (self.prevComponentRendered.length >= 2 && self.prevActiveElement.length >= 2) {
         if (self.prevComponentRendered[self.prevComponentRendered.length - 2] == self.nextComponentRendered && self.prevComponentRendered[self.prevComponentRendered.length - 2] != null && self.nextComponentRendered != null) {
           var coordsOfPreviousElement = self.prevActiveElement[self.prevActiveElement.length - 2];
           self.currentX = coordsOfPreviousElement[0];
           self.currentY = coordsOfPreviousElement[1];
+          prevcomponent_back = true;
         }
       }
 
       if (self.matrixForNavigation.length < self.currentX && self.matrixForNavigation[0].length < self.currentY) {
+        for (var j = 0; j < self.matrixForNavigation[0].length; j++) {
+          if (self.matrixForNavigation[0][j] != null) {
+            self.currentX = 0;
+            self.currentY = j;
+            self.activeElement = self.matrixForNavigation[self.currentX][self.currentY];
+            self.activeElement.focus();
+            break;
+          }
+        }
+      } else if (self.matrixForNavigation.length > self.currentX && self.matrixForNavigation[0].length > self.currentY && prevcomponent_back) {
         self.activeElement = self.matrixForNavigation[self.currentX][self.currentY];
         self.activeElement.focus();
       } else if (self.matrixForNavigation.length > self.currentX && self.matrixForNavigation[0].length > self.currentY) {
-        self.activeElement = self.matrixForNavigation[self.currentX][self.currentY];
-        self.activeElement.focus();
+        for (var j = 0; j < self.matrixForNavigation[0].length; j++) {
+          if (self.matrixForNavigation[0][j] != null) {
+            self.currentX = 0;
+            self.currentY = j;
+            self.activeElement = self.matrixForNavigation[self.currentX][self.currentY];
+            self.activeElement.focus();
+            break;
+          }
+        }
       } else {
-        self.currentX = 0;
-        self.currentY = 0;
-        self.activeElement = self.matrixForNavigation[self.currentX][self.currentY];
-        self.activeElement.focus();
+        for (var j = 0; j < self.matrixForNavigation[0].length; j++) {
+          if (self.matrixForNavigation[0][j] != null) {
+            self.currentX = 0;
+            self.currentY = j;
+            self.activeElement = self.matrixForNavigation[self.currentX][self.currentY];
+            self.activeElement.focus();
+            break;
+          }
+        }
       }
     }
   }, function (err) {
@@ -616,7 +641,23 @@ var handleKeyDown = function (event) {
           this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
           this.activeElement.focus();
         } else if (this.matrixForNavigation[this.currentX + 1][this.currentY] !== undefined && this.matrixForNavigation[this.currentX + 1][this.currentY] != this.activeElement && this.matrixForNavigation[this.currentX + 1][this.currentY] === null) {
-          if (this.currentY >= 0) {
+          var bottom = this.currentX + 1;
+          var found = false;
+
+          while (bottom < maxHeight) {
+            if (this.matrixForNavigation[bottom][this.currentY] != null) {
+              this.activeElement.blur();
+              this.currentX = bottom;
+              this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
+              this.activeElement.focus();
+              found = true;
+              break;
+            }
+
+            bottom++;
+          }
+
+          if (this.currentY >= 0 && !found) {
             var check = check_the_left(this.currentX + 1, this.currentY);
 
             if (check == false) {
@@ -646,7 +687,23 @@ var handleKeyDown = function (event) {
           this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
           this.activeElement.focus();
         } else if (this.matrixForNavigation[this.currentX - 1][this.currentY] !== undefined && this.matrixForNavigation[this.currentX - 1][this.currentY] != this.activeElement && this.matrixForNavigation[this.currentX - 1][this.currentY] === null) {
-          if (this.currentY > 0) {
+          var top = this.currentX - 1;
+          var found = false;
+
+          while (top >= 0) {
+            if (this.matrixForNavigation[top][this.currentY] != null) {
+              this.activeElement.blur();
+              this.currentX = top;
+              this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
+              this.activeElement.focus();
+              found = true;
+              break;
+            }
+
+            top--;
+          }
+
+          if (this.currentY > 0 && !found) {
             var check = check_the_left(this.currentX - 1, this.currentY);
 
             if (check == false) {
@@ -676,7 +733,23 @@ var handleKeyDown = function (event) {
           this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
           this.activeElement.focus();
         } else if (this.matrixForNavigation[this.currentX][this.currentY + 1] !== undefined && this.matrixForNavigation[this.currentX][this.currentY + 1] != this.activeElement && this.matrixForNavigation[this.currentX][this.currentY + 1] === null) {
-          if (this.currentY > 0) {
+          var found = false;
+          var right = this.currentY + 1;
+
+          while (right < maxWidth) {
+            if (this.matrixForNavigation[this.currentX][right] != null) {
+              this.activeElement.blur();
+              this.currentY = right;
+              this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
+              this.activeElement.focus();
+              found = true;
+              break;
+            }
+
+            right++;
+          }
+
+          if (this.currentY > 0 && !found) {
             var check = check_the_top(this.currentX, this.currentY + 1);
 
             if (check == false) {
@@ -706,7 +779,23 @@ var handleKeyDown = function (event) {
           this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
           this.activeElement.focus();
         } else if (this.matrixForNavigation[this.currentX][this.currentY - 1] !== undefined && this.matrixForNavigation[this.currentX][this.currentY - 1] != this.activeElement && this.matrixForNavigation[this.currentX][this.currentY - 1] === null) {
-          if (this.currentX > 0) {
+          var left = this.currentY - 1;
+          var found = false;
+
+          while (left >= 0) {
+            if (this.matrixForNavigation[this.currentX][left] != null) {
+              this.activeElement.blur();
+              this.currentY = left;
+              this.activeElement = this.matrixForNavigation[this.currentX][this.currentY];
+              this.activeElement.focus();
+              found = true;
+              break;
+            }
+
+            left--;
+          }
+
+          if (this.currentX > 0 && !found) {
             var check = check_the_top(this.currentX, this.currentY - 1);
 
             if (check == false) {
