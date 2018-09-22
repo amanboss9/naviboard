@@ -62,7 +62,7 @@ Now when we want to navigate other page or component, we need to destroy the pre
 ```
 ### Other API's: 
 
-When the client is getting refreshed we need to handle it by giving certain input to sustain our navigable items we use `refreshNavigation` API.
+Whenever the client is getting refreshed(some new DOM element insertion or deletion) we need to handle it with updated navigation schema and for this we use `refreshNavigation` API.
 
 e.g if a new component has been added in run time we need to update our library for taking care of the newly added element or removed element.
 
