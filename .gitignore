@@ -1,3 +1,4 @@
+.idea
 node_modules
 webpack.config.babel.js
 npm-debug.log
