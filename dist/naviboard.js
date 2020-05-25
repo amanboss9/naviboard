@@ -207,63 +207,57 @@ function fillNavigationArray(temp1, temp2, t_width, t_height) {
 Naviboard.prototype.makeNavigationRulesForComponent = function (obj, row, column) {
   var _this = this;
 
-  var self = this; // console.log(row, column);
-
+  var self = this;
   var navArray = JSON.parse(JSON.stringify(createArray(row, column)));
 
   var _getMatrixForNavigation = new Promise(function (resolve, reject) {
     var threshold_width = _this.matrixWidth / column;
     var threshold_height = _this.matrixHeight / row;
 
-    var sortByXYcoordinate = function sortByXYcoordinate(list) {
+    var sortByCoordinates = function sortByCoordinates(list) {
       for (var i = 0; i < list.length; i++) {
-        var iValue = list.length * list[i].offset.x + list[i].offset.y;
-        list[i].iValue = iValue;
+        list[i].iValue = list.length * list[i].offset.x + list[i].offset.y;
       }
 
       list.sort(function (a, b) {
-        var x_first = a.offset.y;
-        var x_second = b.offset.y;
-        return x_first < x_second ? -1 : x_first > x_second ? 1 : 0;
+        return a.offset.y < b.offset.y ? -1 : a.offset.y > b.offset.y ? 1 : 0; // sort vertically
       });
       var sorted_by_x = [];
       var arr_to_push = [];
       var _INIT = false;
 
-      for (var i = 0; i < list.length; i++) {
+      for (var _i = 0; _i < list.length; _i++) {
         if (!_INIT) {
-          arr_to_push.push(list[i]);
+          arr_to_push.push(list[_i]);
           _INIT = true;
         } else {
-          if (list[i].offset.y > arr_to_push[arr_to_push.length - 1].offset.y && i != list.length - 1) {
+          if (list[_i].offset.y > arr_to_push[arr_to_push.length - 1].offset.y && _i !== list.length - 1) {
             sorted_by_x.push(arr_to_push);
             arr_to_push = [];
-            arr_to_push.push(list[i]);
-          } else if (i === list.length - 1) {
-            if (list[i].offset.y > arr_to_push[arr_to_push.length - 1].offset.y) {
+            arr_to_push.push(list[_i]);
+          } else if (_i === list.length - 1) {
+            if (list[_i].offset.y > arr_to_push[arr_to_push.length - 1].offset.y) {
               sorted_by_x.push(arr_to_push);
               arr_to_push = [];
-              arr_to_push.push(list[i]);
+              arr_to_push.push(list[_i]);
               sorted_by_x.push(arr_to_push);
             } else {
-              arr_to_push.push(list[i]);
+              arr_to_push.push(list[_i]);
               sorted_by_x.push(arr_to_push);
             }
           } else {
-            arr_to_push.push(list[i]);
+            arr_to_push.push(list[_i]);
           }
         }
       }
 
-      if (arr_to_push.length > 0 && sorted_by_x.length == 0) {
+      if (arr_to_push.length > 0 && sorted_by_x.length === 0) {
         sorted_by_x.push(arr_to_push);
       }
 
       for (var j = 0; j < sorted_by_x.length; j++) {
         sorted_by_x[j].sort(function (a, b) {
-          var x_first = a.offset.x;
-          var x_second = b.offset.x;
-          return x_first < x_second ? -1 : x_first > x_second ? 1 : 0;
+          return a.offset.x < b.offset.x ? -1 : a.offset.x > b.offset.x ? 1 : 0; // sort horizontally
         });
       }
 
@@ -286,22 +280,22 @@ Naviboard.prototype.makeNavigationRulesForComponent = function (obj, row, column
       return sorted_by_x;
     };
 
-    resolve(fillNavigationArray(sortByXYcoordinate(obj), navArray, threshold_width, threshold_height));
-    reject(err);
+    resolve(fillNavigationArray(sortByCoordinates(obj), navArray, threshold_width, threshold_height));
+    reject("Error in getting matrix for navigation.");
   });
 
   _getMatrixForNavigation.then(function (matrix) {
     self.matrixForNavigation = matrix;
 
-    if (self.matrixForNavigation.length != 0 && self.matrixForNavigation != undefined) {
-      var prevcomponent_back = false;
+    if (self.matrixForNavigation != null && self.matrixForNavigation.length !== 0) {
+      var prev_component_back = false;
 
       if (self.prevComponentRendered.length >= 2 && self.prevActiveElement.length >= 2) {
-        if (self.prevComponentRendered[self.prevComponentRendered.length - 2] == self.nextComponentRendered && self.prevComponentRendered[self.prevComponentRendered.length - 2] != null && self.nextComponentRendered != null) {
+        if (self.prevComponentRendered[self.prevComponentRendered.length - 2] === self.nextComponentRendered && self.prevComponentRendered[self.prevComponentRendered.length - 2] != null && self.nextComponentRendered != null) {
           var coordsOfPreviousElement = self.prevActiveElement[self.prevActiveElement.length - 2];
           self.currentX = coordsOfPreviousElement[0];
           self.currentY = coordsOfPreviousElement[1];
-          prevcomponent_back = true;
+          prev_component_back = true;
         }
       }
 
@@ -315,24 +309,24 @@ Naviboard.prototype.makeNavigationRulesForComponent = function (obj, row, column
             break;
           }
         }
-      } else if (self.matrixForNavigation.length > self.currentX && self.matrixForNavigation[0].length > self.currentY && prevcomponent_back) {
+      } else if (self.matrixForNavigation.length > self.currentX && self.matrixForNavigation[0].length > self.currentY && prev_component_back) {
         self.activeElement = self.matrixForNavigation[self.currentX][self.currentY];
         self.activeElement.focus();
       } else if (self.matrixForNavigation.length > self.currentX && self.matrixForNavigation[0].length > self.currentY) {
-        for (var j = 0; j < self.matrixForNavigation[0].length; j++) {
-          if (self.matrixForNavigation[0][j] != null) {
+        for (var _j = 0; _j < self.matrixForNavigation[0].length; _j++) {
+          if (self.matrixForNavigation[0][_j] != null) {
             self.currentX = 0;
-            self.currentY = j;
+            self.currentY = _j;
             self.activeElement = self.matrixForNavigation[self.currentX][self.currentY];
             self.activeElement.focus();
             break;
           }
         }
       } else {
-        for (var j = 0; j < self.matrixForNavigation[0].length; j++) {
-          if (self.matrixForNavigation[0][j] != null) {
+        for (var _j2 = 0; _j2 < self.matrixForNavigation[0].length; _j2++) {
+          if (self.matrixForNavigation[0][_j2] != null) {
             self.currentX = 0;
-            self.currentY = j;
+            self.currentY = _j2;
             self.activeElement = self.matrixForNavigation[self.currentX][self.currentY];
             self.activeElement.focus();
             break;
@@ -489,19 +483,19 @@ naviBoard.getCurrentEvent = function (event) {
 };
 
 naviBoard.refreshNavigation = function (id, status) {
-  if (status == "refresh") {
+  if (status === "refresh") {
     this.prevComponentRendered.push(this.componentRendered);
-    this.prevActiveElement.push(this._getLocationOfActiveElement(activeElement));
-    var refreshstatus = this.destroyCurrentNavigationView(id, "destroy");
+    this.prevActiveElement.push(this._getLocationOfActiveElement(this.activeElement));
+    var refreshStatus = this.destroyCurrentNavigationView(id, "destroy");
 
-    if (refreshstatus) {
+    if (refreshStatus) {
       this.handleView(id);
     } else {}
   } else {
-    var refreshstatus = false;
-    refreshstatus = this.destroyCurrentNavigationView(id, status);
+    var _refreshStatus = false;
+    _refreshStatus = this.destroyCurrentNavigationView(id, status);
 
-    if (refreshstatus) {
+    if (_refreshStatus) {
       this.handleView(id);
     } else {}
   }
