@@ -107,17 +107,21 @@ module.exports = naviBoard;
 /* 1 */
 /***/ (function(module, exports) {
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 var masterElement = window;
 
-function naviboard() {
+function Naviboard() {
   this.currentEvent = null;
   this.componentRendered = null;
   this.matrixForNavigation = null;
@@ -135,29 +139,18 @@ function naviboard() {
   this.matrixHeight = 0;
 }
 
-naviboard.prototype._getLocationOfActiveElement = function (elem) {
+Naviboard.prototype._getLocationOfActiveElement = function (elem) {
   if (this.matrixForNavigation != null) {
     for (var i = 0; i < this.matrixForNavigation.length; i++) {
       for (var j = 0; j < this.matrixForNavigation[0].length; j++) {
-        if (this.matrixForNavigation[i][j] == elem) {
-          // console.log("getLocation" + i + ' ' + j);
+        if (this.matrixForNavigation[i][j] === elem) {
           return [i, j];
-          break;
         }
       }
     }
   }
 
   return [0, 0];
-};
-
-naviboard.prototype.getWindowRelativeOffset = function (elem) {
-  var offset = {
-    left: 0,
-    top: 0
-  };
-  var offset = elem.getBoundingClientRect();
-  return offset;
 };
 
 function createArray(length) {
@@ -187,12 +180,15 @@ function fillNavigationArray(temp1, temp2, t_width, t_height) {
     }
   }
 
-  if (obj != undefined && obj != []) {
+  if (obj !== undefined && obj !== []) {
     for (var i = 0; i < obj.length; i++) {
       for (var j = 0; j < obj[i].length; j++) {
+        var elemWidth = void 0;
+        var elemHeight = void 0;
+
         if (obj[i][j] != null) {
-          var elemWidth = Math.round(obj[i][j].offset.width / t_width);
-          var elemHeight = Math.round(obj[i][j].offset.height / t_height);
+          elemWidth = Math.round(obj[i][j].offset.width / t_width);
+          elemHeight = Math.round(obj[i][j].offset.height / t_height);
         }
 
         if (obj[i][j] !== null && (elemWidth > 1 || elemHeight > 1)) {
@@ -208,7 +204,7 @@ function fillNavigationArray(temp1, temp2, t_width, t_height) {
   return arrToFill;
 }
 
-naviboard.prototype.makeNavigationRulesForComponent = function (obj, row, column) {
+Naviboard.prototype.makeNavigationRulesForComponent = function (obj, row, column) {
   var _this = this;
 
   var self = this; // console.log(row, column);
@@ -349,56 +345,34 @@ naviboard.prototype.makeNavigationRulesForComponent = function (obj, row, column
   });
 };
 
-var prevTime = new Date().getTime();
+Naviboard.prototype.destroyCurrentNavigationView = function (id, status) {
+  if (status === "destroy") {
+    this.prevComponentRendered.push(this.componentRendered);
 
-naviboard.prototype.destroyCurrentNavigationView = function (id, status) {
-  var newTime = new Date().getTime();
-
-  if (newTime - prevTime < 250) {
-    prevTime = newTime;
-    return false;
-  } else {
-    if (status == "destroy") {
-      this.prevComponentRendered.push(this.componentRendered);
-
-      if (this.prevComponentRendered.length >= 5) {
-        this.prevComponentRendered = this.prevComponentRendered.slice(Math.max(this.prevComponentRendered.length - 5, 2));
-      }
-
-      this.prevActiveElement.push(this._getLocationOfActiveElement(this.activeElement));
-
-      if (this.prevActiveElement.length >= 5) {
-        this.prevActiveElement = this.prevActiveElement.slice(Math.max(this.prevActiveElement.length - 5, 2));
-      }
-
-      this.arrayOfCoordinates = [];
-      xFilled = [];
-      yFilled = [];
-      this.initialOffsetX = 0;
-      this.initialOffsetY = 0;
-      this.matrixForNavigation = null;
-      this.currentX = 0;
-      this.currentY = 0;
-      this.activeElement = null;
-      this.currentEvent = null;
-      this.componentRendered = null;
-      prevTime = newTime;
-      return true;
-    } else {
-      xFilled = [];
-      yFilled = [];
-      this.arrayOfCoordinates = [];
-      this.initialOffsetX = 0;
-      this.initialOffsetY = 0;
-      this.matrixForNavigation = null;
-      this.currentX = 0;
-      this.currentY = 0;
-      this.activeElement = null;
-      this.currentEvent = null;
-      prevTime = newTime;
-      return true;
+    if (this.prevComponentRendered.length >= 5) {
+      this.prevComponentRendered = this.prevComponentRendered.slice(Math.max(this.prevComponentRendered.length - 5, 2));
     }
+
+    this.prevActiveElement.push(this._getLocationOfActiveElement(this.activeElement));
+
+    if (this.prevActiveElement.length >= 5) {
+      this.prevActiveElement = this.prevActiveElement.slice(Math.max(this.prevActiveElement.length - 5, 2));
+    }
+
+    this.componentRendered = null;
   }
+
+  this.arrayOfCoordinates = [];
+  xFilled = [];
+  yFilled = [];
+  this.initialOffsetX = 0;
+  this.initialOffsetY = 0;
+  this.matrixForNavigation = null;
+  this.currentX = 0;
+  this.currentY = 0;
+  this.activeElement = null;
+  this.currentEvent = null;
+  return true;
 };
 
 var xFilled = [];
@@ -421,12 +395,10 @@ function findMinMaxWidth(arr) {
     max_bottom = q > max_bottom ? q : max_bottom;
   }
 
-  var width = max_right - min_left;
-  var height = max_bottom - min_top;
-  return [width, height];
+  return [max_right - min_left, max_bottom - min_top]; // [width, height]
 }
 
-naviboard.prototype.increaseRowCountIfRequired = function (offset, rowcount) {
+Naviboard.prototype.increaseRowCountIfRequired = function (offset, rowcount) {
   offset.y = Math.round(offset.y);
 
   if (offset.y > this.initialOffsetY && offset.y > Math.max.apply(Math, _toConsumableArray(yFilled))) {
@@ -442,7 +414,7 @@ naviboard.prototype.increaseRowCountIfRequired = function (offset, rowcount) {
   }
 };
 
-naviboard.prototype.increaseColumnCountIfRequired = function (offset, columnCount) {
+Naviboard.prototype.increaseColumnCountIfRequired = function (offset, columnCount) {
   offset.x = Math.round(offset.x);
 
   if (offset.x > this.initialOffsetX && offset.x > Math.max.apply(Math, _toConsumableArray(xFilled))) {
@@ -458,7 +430,7 @@ naviboard.prototype.increaseColumnCountIfRequired = function (offset, columnCoun
   }
 };
 
-naviboard.prototype.handleView = function (elementIdOfComponentDOM) {
+Naviboard.prototype.handleView = function (elementIdOfComponentDOM) {
   var self = this;
   self.arrayOfCoordinates = [];
   self.componentRendered = elementIdOfComponentDOM;
@@ -468,7 +440,7 @@ naviboard.prototype.handleView = function (elementIdOfComponentDOM) {
     masterElement = document.getElementById(elementIdOfComponentDOM);
     childNodes = masterElement.getElementsByClassName("navigable");
     resolve(childNodes);
-    reject(err);
+    reject("Error in resolving child nodes!");
   });
 
   _getAllChildNodes.then(function (children) {
@@ -477,14 +449,13 @@ naviboard.prototype.handleView = function (elementIdOfComponentDOM) {
 
     for (var i = 0; i < children.length; i++) {
       children[i].tabIndex = children[i].tabIndex === -1 ? 0 : children[i].tabIndex;
-      var offsetXY = self.getWindowRelativeOffset(children[i]);
+      var offsetXY = children[i].getBoundingClientRect();
       row = self.increaseRowCountIfRequired(offsetXY, row);
       column = self.increaseColumnCountIfRequired(offsetXY, column);
-      var obj = {
+      self.arrayOfCoordinates.push({
         "offset": offsetXY,
         "elementToFocus": children[i]
-      };
-      self.arrayOfCoordinates.push(obj);
+      });
     }
 
     self.matrixWidth = findMinMaxWidth(self.arrayOfCoordinates)[0];
@@ -495,7 +466,7 @@ naviboard.prototype.handleView = function (elementIdOfComponentDOM) {
   });
 };
 
-var naviBoard = new naviboard();
+var naviBoard = new Naviboard();
 
 naviBoard.getActiveElement = function () {
   return this.activeElement;
@@ -678,7 +649,7 @@ var handleKeyDown = function (event) {
 
             bottom++;
           }
-        } else {}
+        }
       } else if (event.keyCode == 38) {
         if (this.currentX - 1 < 0) {//"Nothing is UP !!"
         } else if (this.matrixForNavigation[this.currentX - 1][this.currentY] != undefined && this.matrixForNavigation[this.currentX - 1][this.currentY] != this.activeElement) {
@@ -724,7 +695,7 @@ var handleKeyDown = function (event) {
 
             top--;
           }
-        } else {}
+        }
       } else if (event.keyCode == 39) {
         if (this.currentY + 1 >= maxWidth) {//"Nothing is RIGHT !"
         } else if (this.matrixForNavigation[this.currentX][this.currentY + 1] != undefined && this.matrixForNavigation[this.currentX][this.currentY + 1] != this.activeElement) {
@@ -770,7 +741,7 @@ var handleKeyDown = function (event) {
 
             right++;
           }
-        } else {}
+        }
       } else if (event.keyCode == 37) {
         if (this.currentY - 1 < 0) {//"Nothing is LEFT !!"
         } else if (this.matrixForNavigation[this.currentX][this.currentY - 1] != undefined && this.matrixForNavigation[this.currentX][this.currentY - 1] != this.activeElement) {
@@ -816,7 +787,7 @@ var handleKeyDown = function (event) {
 
             left--;
           }
-        } else {}
+        }
       } else {}
     } else {}
   } else {

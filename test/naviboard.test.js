@@ -1,40 +1,21 @@
-var expect = require('chai').expect;
-var assert = require('chai').assert;
-var coordinates = require('./coordinate_array.json');
-var naviBoard = require('../src/index');
+let dom =  require('./browser').dom
+const expect = require('chai').expect;
+const assert = require('chai').assert;
+let naviBoard = require('../src/index');
 
-var row = 0;
-var column = 0;
-var arrayOfCoordinates = [];
-for (var i = 0; i < coordinates.length; i++) {
-    var offsetXY = coordinates[i].offset;
-    row = naviBoard.increaseRowCountIfRequired(offsetXY, row);
-    column = naviBoard.increaseColumnCountIfRequired(offsetXY, column);
-    var obj = {
-        "offset": offsetXY,
-        "elementToFocus": coordinates[i].elementToFocus,
-        "iValue": coordinates[i].iValue
-    }
-    arrayOfCoordinates.push(obj)
-}
+describe('Layout setup in naviboard JS', function() {
+    naviBoard.setNavigation('simulation_1');
 
-describe('Coordinate calculation in naviboard JS', function() {
-
-    it('it should create the array of expected length', function() {
-        expect(arrayOfCoordinates.length).to.be.equal(coordinates.length);
+    it('Should create the navigation matrix of expected length and width', function() {
+        expect(naviBoard.matrixForNavigation.length).to.be.equal(5);
+        expect(naviBoard.matrixForNavigation[0].length).to.be.equal(4);
     })
 
-    it('row number should be as expected', function() {
-        expect(row).to.be.equal(3);
+    it('Should have first element as active element', function() {
+        expect(naviBoard.activeElement).to.be.equal(naviBoard.matrixForNavigation[0][0]);
     })
 
-    it('column number should be as expected', function() {
-        expect(column).to.be.equal(3);
+    it('Should have set the navigation matrix to null.', function() {
+        naviBoard.destroyNavigation('simulation_1');
     })
 });
-
-describe('Matrix calculation in naviboard JS', function(){
-	it('should be equal to the expected matrix',function(){
-        expect(true).to.be.true;
-	})
-})
